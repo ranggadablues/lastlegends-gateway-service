@@ -1,0 +1,53 @@
+# -------------------------
+# Go build output
+# -------------------------
+/bin/
+/build/
+/*.exe
+/*.exe~
+/*.dll
+/*.so
+/*.dylib
+/*.test
+*.out
+
+# Go coverage files
+*.cover
+*.cov
+coverage/
+
+# -------------------------
+# Swagger UI (Node project inside swagger-ui/)
+# -------------------------
+swagger-ui/node_modules/
+swagger-ui/dist/
+swagger-ui/build/
+swagger-ui/.cache/
+swagger-ui/.next/
+swagger-ui/npm-debug.log*
+swagger-ui/yarn-error.log*
+swagger-ui/log.*.txt
+swagger-ui/*.bundle-sizes*.txt
+swagger-ui/log*.txt
+
+# -------------------------
+# Logs
+# -------------------------
+*.log
+logs/
+debug.log
+
+# -------------------------
+# Environment Files
+# -------------------------
+.env
+.env.*
+!.env.example
+
+# -------------------------
+# OS / Editor files
+# -------------------------
+.DS_Store
+Thumbs.db
+.vscode/
+.idea/
