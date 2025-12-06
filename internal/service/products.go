@@ -51,10 +51,3 @@ func (s *productService) UpdateProductById(ctx context.Context, req *pb.UpdatePr
 func (s *productService) DeleteProductById(ctx context.Context, req *pb.DeleteProductByIdRequest) (*pb.DeleteProductByIdResponse, error) {
 	return s.client.DeleteProductById(ctx, req)
 }
-
-// to do
-// buat proto library untuk product service
-// buat service untuk product service
-// buat endpoint untuk product service
-// buat query untuk product service
-// buat unit test untuk product service
