@@ -2,7 +2,6 @@ package middleware
 
 import (
 	"context"
-	"fmt"
 	"net/http"
 	"os"
 	"strings"
@@ -24,7 +23,6 @@ func AuthMiddleware(next http.Handler) http.Handler {
 		}
 
 		claims, err := auth.ValidateAccessToken(token)
-		fmt.Println("cek claims >>", common.ToJSON(claims), "==>", err)
 		if err != nil {
 			// Handle token expiration
 			if err == auth.ErrTokenExpired || err.Error() == "token is expired" {
@@ -51,9 +49,7 @@ func AuthMiddleware(next http.Handler) http.Handler {
 		}
 
 		// ✅ token is valid
-		fmt.Println("cek claims 2 >>", common.ToJSON(claims))
 		ctx := context.WithValue(r.Context(), auth.ClaimsContextKey, claims) // you can attach claims to context if needed
-		fmt.Println("cek ctx >>", ctx)
 		next.ServeHTTP(w, r.WithContext(ctx))
 	})
 }

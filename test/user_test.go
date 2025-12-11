@@ -1,6 +1,7 @@
 package test
 
 import (
+	"bytes"
 	"context"
 	"encoding/json"
 	"net/http"
@@ -33,15 +34,22 @@ func TestGetUserSuccess(t *testing.T) {
 		DeleteUserFn: func(ctx context.Context, req *pb.DeleteUserRequest) (*pb.DeleteUserResponse, error) {
 			return &pb.DeleteUserResponse{Success: true}, nil
 		},
+		LoginUserFn: func(ctx context.Context, req *pb.LoginRequest) (*pb.LoginResponse, error) {
+			return &pb.LoginResponse{
+				Token:        "fake-token-123",
+				RefreshToken: "fake-refresh-456",
+			}, nil
+		},
 	}
 
 	router := mux.NewRouter()
 	eps := endpoint.UserEndpoints{Service: mockUserService}
 	transport.RegisterUserRoutes(router, eps)
 
-	req := httptest.NewRequest("GET", "/api/user/123", nil)
+	body := `{"email":"test@mail.com","password":"123"}`
+	req := httptest.NewRequest(http.MethodPost, "/users/login", bytes.NewBufferString(body))
+	req.Header.Set("Content-Type", "application/json")
 	rec := httptest.NewRecorder()
-
 	router.ServeHTTP(rec, req)
 
 	if rec.Code != http.StatusOK {
@@ -51,7 +59,15 @@ func TestGetUserSuccess(t *testing.T) {
 	var response map[string]interface{}
 	json.Unmarshal(rec.Body.Bytes(), &response)
 
-	if response["name"] != "Test User" {
-		t.Fatalf("unexpected user name: %v", response["name"])
+	resp, ok := response["data"].(map[string]interface{})
+	if !ok {
+		t.Fatalf("expected data to be a map, got %T", response["data"])
+	}
+
+	if resp["token"] != "fake-token-123" {
+		t.Fatalf("unexpected token: %v", resp["token"])
+	}
+	if resp["refreshToken"] != "fake-refresh-456" {
+		t.Fatalf("unexpected refresh token: %v", resp["refreshToken"])
 	}
 }
