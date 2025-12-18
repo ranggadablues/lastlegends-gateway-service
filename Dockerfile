@@ -21,7 +21,7 @@ RUN CGO_ENABLED=0 GOOS=linux GOARCH=amd64 go build -o gateway-service ./cmd
 # ==========================
 # 2. RUN STAGE
 # ==========================
-FROM alpine:3:23.0
+FROM alpine:latest
 
 WORKDIR /app
 

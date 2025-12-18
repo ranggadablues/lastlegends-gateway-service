@@ -15,9 +15,13 @@ func main() {
 	log := logger.NewLogger()
 
 	// Load .env into environment
-	if err := godotenv.Load(".env"); err != nil {
+	dir, err := os.Getwd()
+	if err != nil {
+		log.LogErrorLevel("msg", "Dir not found with error: "+err.Error())
+	}
+	env := fmt.Sprintf("%s/.env", dir)
+	if err := godotenv.Load(env); err != nil {
 		log.LogErrorLevel("msg", "No .env file found: "+err.Error())
-		return
 	}
 
 	handler := transport.NewHTTPHandler()
