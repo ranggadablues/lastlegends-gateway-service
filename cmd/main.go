@@ -15,6 +15,7 @@ func main() {
 	log := logger.NewLogger()
 
 	// Load .env into environment
+	//
 	dir, err := os.Getwd()
 	if err != nil {
 		log.LogErrorLevel("msg", "Dir not found with error: "+err.Error())
