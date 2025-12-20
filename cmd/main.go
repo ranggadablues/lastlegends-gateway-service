@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"net/http"
 	"os"
+	"time"
 
 	"lastlegends-gateway-service/internal/transport"
 
@@ -39,7 +40,15 @@ func main() {
 	message := fmt.Sprintf("Gateway running on %s", gatewayRunPort)
 	log.LogInfoLevel("msg", message)
 
-	if err := http.ListenAndServe(gatewayRunPort, handler); err != nil {
+	srv := &http.Server{
+		Addr:         gatewayRunPort,
+		Handler:      handler,
+		ReadTimeout:  5 * time.Second,
+		WriteTimeout: 10 * time.Second,
+		IdleTimeout:  60 * time.Second,
+	}
+
+	if err := srv.ListenAndServe(); err != nil && err != http.ErrServerClosed {
 		log.LogErrorLevel("msg", err.Error())
 		panic(err)
 	}
