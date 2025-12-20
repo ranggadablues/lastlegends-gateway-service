@@ -7,6 +7,8 @@ import (
 
 	"lastlegends-gateway-service/internal/transport"
 
+	appEmbed "lastlegends-gateway-service"
+
 	"github.com/joho/godotenv"
 	logger "github.com/ranggadablues/gosok/logger"
 )
@@ -25,7 +27,12 @@ func main() {
 		log.LogErrorLevel("msg", "No .env file found: "+err.Error())
 	}
 
-	handler := transport.NewHTTPHandler()
+	handler := transport.NewHTTPHandler(
+		transport.SwaggerAssets{
+			JSON: appEmbed.SwaggerJSON,
+			UI:   appEmbed.SwaggerUI,
+		},
+	)
 
 	gatewayPort := os.Getenv("GATEWAY_SERVICE_PORT")
 	gatewayRunPort := fmt.Sprintf(":%s", gatewayPort)
